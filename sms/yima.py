@@ -5,64 +5,30 @@ import time
 
 import requests
 
+import exceptions
 import settings
 import utils
 
 
-TOKEN = settings.SMS['TOKEN']
 API = 'http://api.51ym.me/UserInterface.aspx'
 ITEMID = 13651
 
-
-class Factory(type):
-    def __new__(cls, name, bases, attrs):
-        base = bases[0]
-        clazz = super(Factory, cls).__new__(cls, name, bases, attrs)
-        if hasattr(base, '_children'):
-            base._children[clazz.code] = clazz
-        return clazz
-
-
-class APIException(Exception):
-    '''
-    1008: 账户余额不足
-    2008: 号码已离线
-    3001: 尚未收到短信
-    '''
-    __metaclass__ = Factory
-
-    _children = {}
-
-    def __init__(self, code=None):
-        if code is not None:
-            self.code = code
-
-    def __str__(self):
-        return 'error code: %s' % self.code
-
-
-class BalanceException(APIException):
-    code = 1008
-
-
-class MobileOfflineException(APIException):
-    code = 2008
-
-
-class NoMessageException(APIException):
-    code = 3001
+codes = {
+    '1008': exceptions.BalanceException,
+    '2008': exceptions.MobileOfflineException,
+    '3001': exceptions.NoMessageException,
+}
 
 
 def raise_exception(code):
-    code = int(code)
-    clazz = APIException._children.get(code, APIException)
+    clazz = codes.get(code, exceptions.SMSException)
     raise clazz(code)
 
 
 def get(action, **kws):
     params = {
         'action': action,
-        'token': TOKEN,
+        'token': settings.YIMA['TOKEN'],
     }
     params.update(kws)
     utils.log('requests.get(url=%r, params=%r)', API, params)
@@ -106,11 +72,11 @@ def getsms(mobile, itemid=ITEMID):
         try:
             text = get('getsms', itemid=ITEMID, mobile=mobile, release=1)
             return re.search(r'\d+', text).group(0)
-        except NoMessageException:  # 暂未收到短信
+        except exceptions.NoMessageException:  # 暂未收到短信
             time.sleep(5)
     # 接收失败的话，自动释放
     release(mobile, itemid)
-    raise NoMessageException()
+    raise exceptions.NoMessageException()
 
 
 def release(mobile, itemid=ITEMID):

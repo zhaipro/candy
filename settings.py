@@ -4,6 +4,10 @@
 ENROLL_ID = 'your enroll id'
 PASSWORD = 'your password'
 
-SMS = {
+YIMA = {
     'TOKEN': 'your token',
+}
+
+XINGKONG = {
+    'TOKEN': 'your token'
 }

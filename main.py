@@ -2,9 +2,10 @@
 import re
 import requests
 
-import sms
 import utils
 from settings import ENROLL_ID, PASSWORD
+from sms import exceptions
+from sms import xingkong as sms
 
 
 def post(session, url, data):
@@ -38,6 +39,11 @@ def login(phone=None):
         utils.log('return: %s', response.text)
         sms.release(phone)
         raise Exception('注册已达上限')
+    elif 'Enter your password' in response.text:
+        utils.log('return: registered')
+        sms.release(phone)
+        sms.addignore(phone)
+        raise exceptions.NoMessageException()
     code = sms.getsms(phone)
 
     # 登录
@@ -75,9 +81,9 @@ if __name__ == '__main__':
         try:
             phone = login()
             print >> fp, phone
-        except (KeyboardInterrupt, sms.BalanceException):
+        except (KeyboardInterrupt, exceptions.BalanceException):
             break
-        except (sms.NoMessageException, sms.MobileOfflineException):
+        except (exceptions.NoMessageException, exceptions.MobileOfflineException):
             pass
         except requests.exceptions.ConnectionError:
             sms.releaseall()
