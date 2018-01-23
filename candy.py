@@ -145,6 +145,13 @@ def lottery_participators(session, lottery_id):
     utils.post(session, url, data)
 
 
+def get_my_lottery(session):
+    url = 'https://candy.one/api/lottery/my'
+    r = utils.get(session, url)
+    # {"reward":12216,"participator_count":1527,"status":1,"id":208}
+    return sum(lottery['reward'] for lottery in r.json()['data'])
+
+
 def main():
     for phone in sys.stdin:
         try:
