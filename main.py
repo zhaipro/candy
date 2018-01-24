@@ -68,7 +68,8 @@ def login(phone=None):
     url = 'https://candy.one/invite'
     utils.log('s.get(url=%r)', url)
     response = s.get(url)
-    uid = re.search(r'candy.one/i/(\d+)', response.text).group(1)
+    uid = re.search(r'candy.one/i/(\d+)', response.text)
+    uid = uid and uid.group(1)
     utils.log('phone: %s, uid: %s', phone, uid)
 
     sms.addignore(phone)
