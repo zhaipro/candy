@@ -85,7 +85,7 @@ if __name__ == '__main__':
             fp.flush()
         except (KeyboardInterrupt, exceptions.BalanceException):
             break
-        except (exceptions.NoMessageException, exceptions.MobileOfflineException):
+        except (exceptions.NoMessageException, exceptions.NothingException):
             pass
         except requests.exceptions.ConnectionError:
             sms.releaseall()

@@ -13,9 +13,9 @@ class BalanceException(SMSException):
     pass
 
 
-class MobileOfflineException(SMSException):
+class NoMessageException(SMSException):
     pass
 
 
-class NoMessageException(SMSException):
+class NothingException(SMSException):   # 无关重要的异常
     pass

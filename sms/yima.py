@@ -15,8 +15,9 @@ ITEMID = 13651
 
 codes = {
     '1008': exceptions.BalanceException,
-    '2008': exceptions.MobileOfflineException,
     '3001': exceptions.NoMessageException,
+    '2007': exceptions.NothingException,    # 号码已被释放
+    '2008': exceptions.NothingException,    # 号码已离线
 }
 
 
