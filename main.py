@@ -77,16 +77,16 @@ def login(phone=None):
 
 
 if __name__ == '__main__':
-    fp = open('phone.txt', 'a+')
+    fp = open('phone.txt', 'a')
     while True:
         try:
             phone = login()
             print >> fp, phone
+            fp.flush()
         except (KeyboardInterrupt, exceptions.BalanceException):
             break
         except (exceptions.NoMessageException, exceptions.MobileOfflineException):
             pass
         except requests.exceptions.ConnectionError:
             sms.releaseall()
-    fp.flush()  # 我并不确定在关闭的时候是否会自动完成刷新工作
     fp.close()
