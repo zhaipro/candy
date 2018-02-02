@@ -1,18 +1,12 @@
 # coding: utf-8
 import re
+
 import requests
 
 import utils
 from settings import ENROLL_ID, PASSWORD
 from sms import exceptions
 from sms import xingkong as sms
-
-
-def post(session, url, data):
-    utils.log('s.post(url=%r, data=%r)', url, data)
-    response = session.post(url, data)
-    utils.log('return: %s', response)
-    return response
 
 
 def login(phone=None):
@@ -34,7 +28,7 @@ def login(phone=None):
         'enroll_id': ENROLL_ID,
     }
     url = 'https://candy.one/i/%s' % ENROLL_ID
-    response = post(s, url, data)
+    response = utils.post(s, url, data)
     if len(response.text) <= 80:
         utils.log('return: %s', response.text)
         sms.release(phone)
@@ -54,15 +48,15 @@ def login(phone=None):
         'countrycode': 'CN',
     }
     url = 'https://candy.one/user'
-    post(s, url, data)
+    utils.post(s, url, data)
 
     # 设定密码
     data = {
         'usr_pwd': PASSWORD,
         'user_confirm_pwd': PASSWORD,
     }
-    url = 'https://candy.one/user/register'
-    post(s, url, data)
+    url = 'https://candy.one/user/regist'
+    utils.post(s, url, data)
 
     # 获取用户id
     url = 'https://candy.one/invite'

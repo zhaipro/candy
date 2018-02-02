@@ -22,3 +22,10 @@ def log(fmt, *args):
     fp = open(fn, 'a')
     print >> fp, pid, msg
     fp.close()
+
+
+def post(session, url, data):
+    log('s.post(url=%r, data=%r)', url, data)
+    r = session.post(url, data)
+    log('return: %s %s, %s', r.status_code, r.reason, r.text)
+    return r
