@@ -12,3 +12,9 @@ YIMA = {
 XINGKONG = {
     'TOKEN': 'your token'
 }
+
+PROXIES = None
+# {
+#     'http': 'socks5://127.0.0.1:1080',
+#     'https': 'socks5://127.0.0.1:1080',
+# }

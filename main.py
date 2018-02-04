@@ -1,86 +1,31 @@
 # coding: utf-8
-import re
-
-import requests
-
+import candy
 import utils
-from settings import ENROLL_ID, PASSWORD
 from sms import exceptions
-from sms import xingkong as sms
+from sms import yima as sms
 
 
-def login(phone=None):
-    # 准备会话
-    s = requests.Session()
-    headers = {
-        'Referer': 'https://candy.one/i/%s' % ENROLL_ID,
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; …) Gecko/20100101 Firefox/57.0',
-    }
-    s.headers.update(headers)
-
-    # 请求登录
-    phone = sms.getmobile(mobile=phone)
-    data = {
-        'phone': phone,
-        'dialcode': '86',
-        'countrycode': 'cn',
-        'status': 'login',
-        'enroll_id': ENROLL_ID,
-    }
-    url = 'https://candy.one/i/%s' % ENROLL_ID
-    response = utils.post(s, url, data)
-    if len(response.text) <= 80:
-        utils.log('return: %s', response.text)
-        sms.release(phone)
-        raise Exception('注册已达上限')
-    elif 'Enter your password' in response.text:
-        utils.log('return: registered')
-        sms.release(phone)
-        sms.addignore(phone)
-        raise exceptions.NoMessageException()
+def register(phone):
+    s = candy.register(phone)
     code = sms.getsms(phone)
-
-    # 登录
-    data = {
-        'code': code,
-        'status': 'send_msg',
-        'phone': '86%s' % phone,
-        'countrycode': 'CN',
-    }
-    url = 'https://candy.one/user'
-    utils.post(s, url, data)
-
-    # 设定密码
-    data = {
-        'usr_pwd': PASSWORD,
-        'user_confirm_pwd': PASSWORD,
-    }
-    url = 'https://candy.one/user/regist'
-    utils.post(s, url, data)
-
-    # 获取用户id
-    url = 'https://candy.one/invite'
-    utils.log('s.get(url=%r)', url)
-    response = s.get(url)
-    uid = re.search(r'candy.one/i/(\d+)', response.text)
-    uid = uid and uid.group(1)
-    utils.log('phone: %s, uid: %s', phone, uid)
-
-    sms.addignore(phone)
-    return phone
+    candy.verify_code_login(s, phone, code)
+    candy.set_password(s, phone)
+    code = candy.get_redeem_code(s)
+    utils.record('exchange_code', code)
 
 
 if __name__ == '__main__':
-    fp = open('phone.txt', 'a')
     while True:
         try:
-            phone = login()
-            print >> fp, phone
-            fp.flush()
+            phone = sms.getmobile()
+            if not candy.is_register(phone):
+                register(phone)
+                utils.record('phone', phone)
+            sms.addignore(phone)
         except (KeyboardInterrupt, exceptions.BalanceException):
             break
         except (exceptions.NoMessageException, exceptions.NothingException):
             pass
-        except requests.exceptions.ConnectionError:
-            sms.releaseall()
-    fp.close()
+        except Exception, e:
+            utils.log('Error: %s', e)
+            sms.release(phone)

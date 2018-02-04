@@ -1,6 +1,9 @@
 # coding: utf-8
 import binascii
 import os
+import time
+
+from settings import PROXIES
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,6 +29,20 @@ def log(fmt, *args):
 
 def post(session, url, data):
     log('s.post(url=%r, data=%r)', url, data)
-    r = session.post(url, data)
+    r = session.post(url, data, proxies=PROXIES)
     log('return: %s %s, %s', r.status_code, r.reason, r.text)
     return r
+
+
+def get(session, url, params=None):
+    log('s.get(url=%r, params=%r)', url, params)
+    r = session.get(url, params=params, proxies=PROXIES)
+    log('return: %s %s, %s', r.status_code, r.reason, r.text)
+    return r
+
+
+def record(name, value):
+    fn = os.path.join(BASE_DIR, 'record.txt')
+    fp = open(fn, 'a')
+    print >> fp, '%d\t%s\t%s' % (time.time(), name, value)
+    fp.close()

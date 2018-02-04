@@ -32,14 +32,12 @@ def get(action, **kws):
         'token': settings.YIMA['TOKEN'],
     }
     params.update(kws)
-    utils.log('requests.get(url=%r, params=%r)', API, params)
-    response = requests.get(API, params).text
-    utils.log('return: %s', response)
-    if not response.startswith('success'):
-        raise_exception(response)
-    if '|' in response:
-        _, response = response.split('|', 1)
-        return response
+    r = utils.get(requests, API, params).text
+    if not r.startswith('success'):
+        raise_exception(r)
+    if '|' in r:
+        _, r = r.split('|', 1)
+        return r
 
 
 def getaccountinfo():
@@ -81,7 +79,10 @@ def getsms(mobile, itemid=ITEMID):
 
 
 def release(mobile, itemid=ITEMID):
-    return get('release', itemid=ITEMID, mobile=mobile)
+    try:
+        get('release', itemid=ITEMID, mobile=mobile)
+    except exceptions.NothingException:
+        pass
 
 
 def addignore(mobile, itemid=ITEMID):
