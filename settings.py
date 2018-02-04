@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 import argparse
 import os
 
+import socks
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -37,4 +39,10 @@ NTHREAD = args.nthread
 
 DATABASE = {
     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}
+
+TELEGRAM = {
+    'ID': 12345,
+    'HASH': '0123456789abcdef0123456789abcdef',
+    'PROXY': (socks.SOCKS5, 'localhost', 1080),
 }
