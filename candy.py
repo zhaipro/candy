@@ -1,6 +1,7 @@
 # coding: utf-8
 import sys
 import time
+from datetime import datetime
 
 import requests
 from splinter import Browser
@@ -34,16 +35,7 @@ def _login(browser, phone):
 
 
 def gen_session(cookies):
-    s = requests.Session()
-    headers = {
-        'Referer': 'https://candy.one/',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; …) Gecko/20100101 Firefox/57.0',
-    }
-    s.headers.update(headers)
-    s.cookies.update(cookies)
-    if '_candy_token' in cookies:
-        s.headers['x-access-token'] = cookies['_candy_token']
-    return s
+    return utils.gen_session(cookies.get('_candy_token'))
 
 
 def password_login(phone, password=PASSWORD):
@@ -89,16 +81,17 @@ def is_register(phone):
     return data['registed']     # data['hasPas']
 
 
-def withdraw(session, address=ADDRESS):
+def withdraw(session, address=ADDRESS, amount=None):
     '''
     提取全部余额到指定BigOne账户
     '''
-    balance = get_balance(session)
-    if balance <= 0:
+    if amount is None:
+        amount = get_balance(session)
+    if amount <= 0:
         return
     url = 'https://candy.one/api/transaction/withdraw'
     data = {
-        'amount': balance,
+        'amount': amount,
         'recipient_id': address,
     }
     utils.post(session, url, data)
@@ -132,6 +125,24 @@ def verify_code_login(session, phone, code):
     r = utils.post(session, url, data)
     at = r.json()['data']['access_token']
     session.headers['x-access-token'] = at
+
+
+def get_lottery(session):
+    params = {
+        'date': datetime.now().strftime('%Y-%m-%d'),
+        'page': 1,
+        'limit': 1,
+    }
+    url = 'https://candy.one/api/lottery/list'
+    r = utils.get(session, url, params)
+    # {"price": 10, "id": 172}
+    return r.json()['data'][0]
+
+
+def lottery_participators(session, lottery_id):
+    url = 'https://candy.one/api/lottery-participators/participate'
+    data = {'lottery_id': lottery_id}
+    utils.post(session, url, data)
 
 
 def main():

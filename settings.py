@@ -1,7 +1,10 @@
 # coding: utf-8
 from __future__ import unicode_literals
 import argparse
+import os
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 parser = argparse.ArgumentParser(description='主程序')
 parser.add_argument('-p', '--process', default='process1',
@@ -31,3 +34,7 @@ PROXIES = None
 
 PROCESS = args.process
 NTHREAD = args.nthread
+
+DATABASE = {
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}

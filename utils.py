@@ -1,8 +1,9 @@
 # coding: utf-8
 import binascii
-import fcntl
 import os
 import time
+
+import requests
 
 from settings import PROXIES
 
@@ -54,9 +55,23 @@ class Lock(object):
         self.fn = fn
 
     def __enter__(self):
+        import fcntl
         self.fp = open(self.fn, 'w')
         fcntl.flock(self.fp, fcntl.LOCK_EX)
 
     def __exit__(self, exc_type=None, exc_value=None, exc_tb=None):
+        import fcntl
         fcntl.flock(self.fp, fcntl.LOCK_UN)
         self.fp.close()
+
+
+def gen_session(token=None):
+    s = requests.Session()
+    headers = {
+        'Referer': 'https://candy.one/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; …) Gecko/20100101 Firefox/57.0',
+    }
+    s.headers.update(headers)
+    if token is not None:
+        s.headers['x-access-token'] = token
+    return s
