@@ -1,5 +1,6 @@
 # coding: utf-8
 import binascii
+import fcntl
 import os
 import time
 
@@ -46,3 +47,16 @@ def record(name, value):
     fp = open(fn, 'a')
     print >> fp, '%d\t%s\t%s' % (time.time(), name, value)
     fp.close()
+
+
+class Lock(object):
+    def __init__(self, fn):
+        self.fn = fn
+
+    def __enter__(self):
+        self.fp = open(self.fn, 'w')
+        fcntl.flock(self.fp, fcntl.LOCK_EX)
+
+    def __exit__(self, exc_type=None, exc_value=None, exc_tb=None):
+        fcntl.flock(self.fp, fcntl.LOCK_UN)
+        self.fp.close()

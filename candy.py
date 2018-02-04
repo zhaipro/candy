@@ -7,7 +7,7 @@ from splinter import Browser
 from selenium.webdriver import ActionChains
 
 import utils
-from settings import PASSWORD, ADDRESS, ENROLL_ID
+from settings import PASSWORD, ADDRESS, ENROLL_ID, PROCESS
 
 
 def _login(browser, phone):
@@ -65,11 +65,11 @@ def register(phone):
     '''
     注册指定账号，并返回cookies
     '''
-    with Browser(headless=True) as browser:
-        _login(browser, phone)
-
-        cookies = browser.cookies.all()
-        return gen_session(cookies)
+    with utils.Lock(PROCESS):
+        with Browser(headless=True) as browser:
+            _login(browser, phone)
+            cookies = browser.cookies.all()
+            return gen_session(cookies)
 
 
 def get_balance(session):
