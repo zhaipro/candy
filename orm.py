@@ -9,10 +9,10 @@ db = SqliteExtDatabase(settings.DATABASE['NAME'])
 
 class User(peewee.Model):
     phone = peewee.CharField(16, unique=True)
-    balance = peewee.IntegerField()
+    balance = peewee.IntegerField(default=0)
     token = peewee.CharField(256)
-    expires = peewee.IntegerField()
-    uid = peewee.IntegerField()
+    expires = peewee.IntegerField(default=0)
+    uid = peewee.IntegerField(null=True)
 
     class Meta:
         database = db

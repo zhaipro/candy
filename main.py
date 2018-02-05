@@ -2,20 +2,30 @@
 import threading
 import time
 
+import jwt
+
 import candy
+import orm
 import settings
+import telegram
 import utils
 from sms import exceptions
 from sms import yima as sms
+
+
+def create_user(phone, token):
+    payload = jwt.decode(token, verify=False)
+    orm.User.create(phone=phone, token=token, expires=payload['exp'], uid=payload['id'])
 
 
 def register(phone):
     s = candy.register(phone)
     code = sms.getsms(phone)
     candy.verify_code_login(s, phone, code)
+    create_user(phone, s.headers['x-access-token'])
     candy.set_password(s, phone)
     code = candy.get_redeem_code(s)
-    utils.record('exchange_code', code)
+    telegram.send_code(code)
 
 
 def main():

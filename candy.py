@@ -55,7 +55,7 @@ def password_login(phone, password=PASSWORD):
 
 def register(phone):
     '''
-    注册指定账号，并返回cookies
+    注册指定账号，并返回session
     '''
     with utils.Lock(PROCESS):
         with Browser(headless=True) as browser:
