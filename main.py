@@ -3,6 +3,7 @@ import threading
 import time
 
 import jwt
+import six
 
 import candy
 import orm
@@ -40,7 +41,7 @@ def main():
             run_event.clear()
         except (exceptions.NoMessageException, exceptions.NothingException):
             pass
-        except Exception, e:
+        except Exception as e:
             utils.log('Error: %s', e)
             sms.release(phone)
 
@@ -48,7 +49,7 @@ def main():
 if __name__ == '__main__':
     run_event = threading.Event()
     run_event.set()
-    threads = [threading.Thread(target=main) for _ in xrange(settings.NTHREAD)]
+    threads = [threading.Thread(target=main) for _ in six.moves.range(settings.NTHREAD)]
     for thread in threads:
         thread.start()
     try:

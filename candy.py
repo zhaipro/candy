@@ -158,7 +158,7 @@ def main():
             phone = phone.strip()
             session = password_login(phone)
             withdraw(session)
-        except Exception, e:
+        except Exception as e:
             utils.log('Error: %s', e)
 
 

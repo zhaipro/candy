@@ -4,7 +4,7 @@ from telethon import TelegramClient
 from settings import TELEGRAM
 
 
-client = TelegramClient('session_name', TELEGRAM['ID'], TELEGRAM['HASH'], proxy=TELEGRAM['PROXY'])
+client = TelegramClient('telegram', TELEGRAM['ID'], TELEGRAM['HASH'], proxy=TELEGRAM['PROXY'])
 client.start()
 
 

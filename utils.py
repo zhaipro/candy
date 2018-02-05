@@ -4,6 +4,7 @@ import os
 import time
 
 import requests
+import six
 
 from settings import PROXIES
 
@@ -12,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def random_hex(n):
-    return binascii.b2a_hex(os.urandom((n + 1) / 2))[:n]
+    return binascii.b2a_hex(os.urandom((n + 1) // 2))[:n]
 
 
 pid = random_hex(7)     # 4 * 7 bits
@@ -20,12 +21,12 @@ pid = random_hex(7)     # 4 * 7 bits
 
 def log(fmt, *args):
     msg = fmt % args
-    if isinstance(msg, unicode):
+    if hasattr(msg, 'encode'):
         msg = msg.encode('utf-8')
-    print msg
+    six.print_(msg)
     fn = os.path.join(BASE_DIR, 'a.log')
     fp = open(fn, 'a')
-    print >> fp, pid, msg
+    six.print_(pid, msg, file=fp)
     fp.close()
 
 
@@ -46,7 +47,8 @@ def get(session, url, params=None):
 def record(name, value):
     fn = os.path.join(BASE_DIR, 'record.txt')
     fp = open(fn, 'a')
-    print >> fp, '%d\t%s\t%s' % (time.time(), name, value)
+    msg = '%d\t%s\t%s' % (time.time(), name, value)
+    six.print_(msg, file=fp)
     fp.close()
 
 
@@ -69,7 +71,7 @@ def gen_session(token=None):
     s = requests.Session()
     headers = {
         'Referer': 'https://candy.one/',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; …) Gecko/20100101 Firefox/57.0',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0',
     }
     s.headers.update(headers)
     if token is not None:

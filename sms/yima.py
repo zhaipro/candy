@@ -4,10 +4,11 @@ import re
 import time
 
 import requests
+import six
 
-import exceptions
 import settings
 import utils
+from . import exceptions
 
 
 API = 'http://api.51ym.me/UserInterface.aspx'
@@ -67,7 +68,7 @@ def getmobile(mobile=None, itemid=ITEMID):
 
 def getsms(mobile, itemid=ITEMID):
     # 尝试10次，间隔5秒
-    for _ in xrange(10):
+    for _ in six.moves.range(10):
         try:
             text = get('getsms', itemid=ITEMID, mobile=mobile, release=1)
             return re.search(r'\d+', text).group(0)
@@ -99,5 +100,5 @@ releaseall()
 if __name__ == '__main__':
     # print getaccountinfo()
     mobile = getmobile()
-    print mobile
-    print release(mobile)
+    print(mobile)
+    print(release(mobile))

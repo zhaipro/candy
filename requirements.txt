@@ -3,3 +3,5 @@ splinter
 peewee
 telethon
 pyjwt
+six
+pysocks

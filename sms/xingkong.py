@@ -3,6 +3,7 @@ import re
 import time
 
 import requests
+import six
 
 import utils
 import exceptions
@@ -52,7 +53,7 @@ def releaseall():
 
 
 def getsms(mobile):
-    for _ in xrange(10):
+    for _ in six.moves.range(10):
         try:
             sms = get('GetYzmStr', hm=mobile, xmid=ITEMID)
             check_response(sms, {'1': exceptions.NoMessageException})
