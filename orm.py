@@ -11,6 +11,8 @@ class User(peewee.Model):
     phone = peewee.CharField(16, unique=True)
     balance = peewee.IntegerField()
     token = peewee.CharField(256)
+    expires = peewee.IntegerField()
+    uid = peewee.IntegerField()
 
     class Meta:
         database = db

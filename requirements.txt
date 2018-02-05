@@ -2,3 +2,4 @@ requests[socks]
 splinter
 peewee
 telethon
+pyjwt
