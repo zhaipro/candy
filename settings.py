@@ -46,3 +46,7 @@ TELEGRAM = {
     'HASH': '0123456789abcdef0123456789abcdef',
     'PROXY': (socks.SOCKS5, 'localhost', 1080),
 }
+
+EOZ = {
+    'INVITE': '123456',
+}
