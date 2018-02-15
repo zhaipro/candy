@@ -8,6 +8,7 @@ import telethon
 
 from proxy import parser_proxy
 from sms import yima as sms
+from sms.exceptions import BalanceException
 import eth
 import orm
 import settings
@@ -54,9 +55,8 @@ def telegram_create_client(phone, proxy=None):
 
 
 def telegram_sign_up(proxy=None):
+    phone = sms.getmobile(itemid=sms.TELEGRAM)
     try:
-        phone = sms.getmobile(itemid=sms.TELEGRAM)
-
         def code_callback():
             return sms.getsms(phone, itemid=sms.TELEGRAM)
         client = telegram_create_client(phone, proxy)
@@ -65,11 +65,11 @@ def telegram_sign_up(proxy=None):
         name = name.strip()
         telegram.sign_up(client, phone, code_callback, name)
         orm.TelegramAccount.create(phone=phone, password=settings.PASSWORD)
-    except KeyboardInterrupt:
-        raise
-    except Exception as e:
-        utils.log('Error: %r', e)
-        raise e
     finally:
         sms.addignore(phone, itemid=sms.TELEGRAM)
     return client
+
+
+def loop(func):
+    errors = (BalanceException, telethon.errors.ApiIdInvalidError)
+    utils.loop(func, errors)

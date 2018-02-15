@@ -30,8 +30,8 @@ DATABASE = {
 }
 
 TELEGRAM = {
-    'ID': 12345,
-    'HASH': '0123456789abcdef0123456789abcdef',
+    'ID': os.getenv('TELEGRAM_ID', 12345),
+    'HASH': os.getenv('TELEGRAM_HASH', '0123456789abcdef0123456789abcdef'),
     'PROXY': (socks.SOCKS5, 'localhost', 1080),
 }
 
@@ -41,4 +41,5 @@ EOZ = {
 
 BEC = {
     'INVITE': '',
+    'CHANNEL': os.getenv('BEC_CHANNEL', 'beautychian05'),
 }

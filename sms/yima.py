@@ -68,13 +68,14 @@ def getmobile(mobile=None, itemid=ITEMID):
 
 
 def getsms(mobile, itemid=ITEMID):
-    # 尝试10次，间隔5秒
-    for _ in six.moves.range(10):
+    # 总之50秒是不够用的
+    # 尝试20次，间隔6秒
+    for _ in six.moves.range(20):
         try:
             text = get('getsms', itemid=itemid, mobile=mobile, release=1)
             return re.search(r'\d+', text).group(0)
-        except exceptions.NoMessageException:  # 暂未收到短信
-            time.sleep(5)
+        except (exceptions.NoMessageException, requests.Timeout):   # 暂未收到短信 or 超时
+            time.sleep(6)
     # 接收失败的话，自动释放
     release(mobile, itemid)
     raise exceptions.NoMessageException()

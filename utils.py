@@ -41,16 +41,20 @@ def log_response(r):
     log('return: %s %s, %s', r.status_code, r.reason, text)
 
 
+# 总之5秒是不够用的
+TIMEOUT = 13
+
+
 def post(session, url, data):
     log('s.post(url=%r, data=%r)', url, data)
-    r = session.post(url, data, proxies=settings.PROXIES, timeout=5)
+    r = session.post(url, data, proxies=settings.PROXIES, timeout=TIMEOUT)
     log_response(r)
     return r
 
 
 def get(session, url, params=None, **kws):
     log('s.get(url=%r, params=%r)', url, params)
-    r = session.get(url, params=params, proxies=settings.PROXIES, timeout=5, **kws)
+    r = session.get(url, params=params, proxies=settings.PROXIES, timeout=TIMEOUT, **kws)
     log_response(r)
     return r
 
@@ -90,16 +94,19 @@ def ocr(img):
     return tesserocr.image_to_text(img).strip()
 
 
-def _try(func, *args, **kws):
-    try:
-        func(*args, **kws)
-    except KeyboardInterrupt:
-        # 这里最好是抛出异常，而不是直接退出程序，上层调用可能需要执行finally
-        raise
-    except Exception as e:
-        log('Error: %r', e)
-
-
-def loop(func):
+def loop(func, errors=None):
+    # errors: 致命错误列表
+    if errors:
+        errors = (KeyboardInterrupt, *errors)
+    else:
+        errors = KeyboardInterrupt
     while True:
-        _try(func)
+        try:
+            func()
+        except errors:
+            # 触发致命异常，一定要退出啊，而且要正常退出，不然supervisor会重启程序
+            exit(0)
+        # TODO: 这里使用这么强力的异常捕获，要千万小心
+        # 请始终确保这里是唯一捕获顶级异常的地方，不要在增加维护成本了
+        except Exception as e:
+            log('Error: %r', e)
