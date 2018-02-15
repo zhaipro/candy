@@ -1,5 +1,6 @@
 # coding: utf-8
 from datetime import datetime
+from uuid import uuid4
 import binascii
 import os
 import re
@@ -53,14 +54,14 @@ TIMEOUT = 13
 
 def post(session, url, data, **kws):
     log('s.post(url=%r, data=%r)', url, data)
-    r = session.post(url, data, proxies=settings.PROXIES, timeout=TIMEOUT, **kws)
+    r = session.post(url, data, timeout=TIMEOUT, **kws)
     log_response(r)
     return r
 
 
 def get(session, url, params=None, **kws):
     log('s.get(url=%r, params=%r)', url, params)
-    r = session.get(url, params=params, proxies=settings.PROXIES, timeout=TIMEOUT, **kws)
+    r = session.get(url, params=params, timeout=TIMEOUT, **kws)
     log_response(r)
     return r
 
@@ -119,3 +120,8 @@ def loop(func, errors=None):
 
 
 mem = Memory(cachedir=os.path.join(settings.DATA_DIR, 'joblib'))
+
+
+def gen_uuid():
+    # '00000000-0000-0000-0000-000000000000'
+    return str(uuid4()).upper()

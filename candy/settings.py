@@ -21,9 +21,15 @@ XINGKONG = {
     'TOKEN': 'your token'
 }
 
+# 翻墙用代理
+PROXY = 'socks5://127.0.0.1:1080'
 PROXIES = {
-    'http': 'socks5://127.0.0.1:1080',
-    'https': 'socks5://127.0.0.1:1080',
+    'http': PROXY,
+    'https': PROXY,
+}
+
+TOR = {
+    'https': 'socks5://127.0.0.1:9050',
 }
 
 DATABASE = {
@@ -41,7 +47,8 @@ EOZ = {
 }
 
 BEC = {
-    'ROBOT': os.getenv('BEC_ROBOT', 'BECTelegram2Bot'),
+    'CHANNEL': os.getenv('BEC_CHANNEL', 'beautychian5'),
+    'ROBOT': os.getenv('BEC_ROBOT', 'BECS2TelegramBot'),
 }
 
 ETH = {

@@ -12,6 +12,8 @@ def main():
     address = helpers.eth_gen_account('BEC2')
     bec.create_wallet(address)
     telegram.send_code(client, settings.BEC['ROBOT'], address)
+    # 用于反防作弊
+    telegram.join(client, settings.BEC['CHANNEL'])
 
 
 if __name__ == '__main__':

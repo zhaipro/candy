@@ -33,6 +33,8 @@ def get(action, **kws):
         'token': settings.YIMA['TOKEN'],
     }
     params.update(kws)
+    # 有时候不使用代理会触发人机验证…
+    # 有时候使用代理会超时
     r = utils.get(requests, API, params).text
     if not r.startswith('success'):
         raise_exception(r)
