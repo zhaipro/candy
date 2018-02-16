@@ -19,7 +19,7 @@ def create_user(phone, token):
     orm.User.create(phone=phone, token=token, expires=payload['exp'], uid=payload['id'])
 
 
-def register(phone):
+def _register(phone):
     s = candy.register(phone)
     code = sms.getsms(phone)
     candy.verify_code_login(s, phone, code)
@@ -29,13 +29,15 @@ def register(phone):
     telegram.send_code(code)
 
 
-def main():
+run_event = None
+
+
+def register():
     while run_event.is_set():
         try:
             phone = sms.getmobile()
             if not candy.is_register(phone):
-                register(phone)
-                utils.record('phone', phone)
+                _register(phone)
             sms.addignore(phone)
         except exceptions.BalanceException:
             run_event.clear()
@@ -46,10 +48,11 @@ def main():
             sms.release(phone)
 
 
-if __name__ == '__main__':
+def main():
+    global run_event
     run_event = threading.Event()
     run_event.set()
-    threads = [threading.Thread(target=main) for _ in six.moves.range(settings.NTHREAD)]
+    threads = [threading.Thread(target=register) for _ in six.moves.range(settings.NTHREAD)]
     for thread in threads:
         thread.start()
     try:
@@ -59,3 +62,25 @@ if __name__ == '__main__':
         run_event.clear()
     for thread in threads:
         thread.join()
+
+
+def _relogin(user):
+    session = candy.password_login(user.phone)
+    user.token = session.headers.get('x-access-token')
+    user.balance = candy.get_balance(session)
+    payload = jwt.decode(user.token, verify=False)
+    user.expires = payload['exp']
+    user.save()
+
+
+def relogin():
+    now = time.time()
+    for user in orm.User.filter(expires__lt=now):
+        try:
+            _relogin(user)
+        except Exception as e:
+            utils.log('Error: %s', e)
+
+
+if __name__ == '__main__':
+    relogin()

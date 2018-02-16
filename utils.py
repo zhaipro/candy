@@ -2,7 +2,6 @@
 import binascii
 import os
 import re
-import time
 
 import requests
 import six
@@ -53,14 +52,6 @@ def get(session, url, params=None, **kws):
         text = '<binary>'
     log('return: %s %s, %s', r.status_code, r.reason, text)
     return r
-
-
-def record(name, value):
-    fn = os.path.join(BASE_DIR, 'record.txt')
-    fp = open(fn, 'a')
-    msg = '%d\t%s\t%s' % (time.time(), name, value)
-    six.print_(msg, file=fp)
-    fp.close()
 
 
 class Lock(object):

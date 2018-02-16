@@ -1,5 +1,4 @@
 # coding: utf-8
-import sys
 import time
 from datetime import datetime
 
@@ -150,16 +149,6 @@ def get_my_lottery(session):
     r = utils.get(session, url)
     # {"reward":12216,"participator_count":1527,"status":1,"id":208}
     return sum(lottery['reward'] for lottery in r.json()['data'])
-
-
-def main():
-    for phone in sys.stdin:
-        try:
-            phone = phone.strip()
-            session = password_login(phone)
-            withdraw(session)
-        except Exception as e:
-            utils.log('Error: %s', e)
 
 
 if __name__ == '__main__':
