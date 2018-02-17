@@ -24,11 +24,13 @@ def _login(browser, phone):
     time.sleep(1)
     driver = browser.driver
     fuck = driver.find_element_by_id('nc_1_n1z')
+    # http://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.common.action_chains
     action = ActionChains(driver)
-    action.click_and_hold(fuck)
+    # 直接这么做似乎有点问题：
+    # action.click_and_hold(fuck)
+    action.move_to_element_with_offset(fuck, 10, 10).click_and_hold()
     action.move_by_offset(550, 0)
     action.release().perform()
-
     time.sleep(1)
     utils.log(browser.url)
 
@@ -41,6 +43,7 @@ def password_login(phone, password=PASSWORD):
     '''
     登录指定账号，并返回requests.Session对象
     '''
+    # 这里不能使用隐私窗口，否则会导致拿不到cookies
     with Browser(headless=True) as browser:
         _login(browser, phone)
         browser.fill('password', password)
@@ -152,6 +155,5 @@ def get_my_lottery(session):
 
 
 if __name__ == '__main__':
-    phone = '18515355023'
-    session = register(phone)
-    verify_code_login(session, phone, '123456')
+    phone = '18515355024'
+    password_login(phone)
