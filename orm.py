@@ -27,7 +27,16 @@ class Account(peewee.Model):
         database = db
 
 
+class TelegramAccount(peewee.Model):
+    phone = peewee.CharField(16, unique=True)
+    password = peewee.CharField()
+
+    class Meta:
+        database = db
+
+
 db.connect()
 # https://github.com/coleifer/peewee/issues/211
 User.create_table(fail_silently=True)
 Account.create_table(fail_silently=True)
+TelegramAccount.create_table(fail_silently=True)

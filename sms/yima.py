@@ -13,6 +13,7 @@ from . import exceptions
 
 API = 'http://api.51ym.me/UserInterface.aspx'
 ITEMID = 13651
+TELEGRAM = 3988
 
 codes = {
     '1008': exceptions.BalanceException,
@@ -70,7 +71,7 @@ def getsms(mobile, itemid=ITEMID):
     # 尝试10次，间隔5秒
     for _ in six.moves.range(10):
         try:
-            text = get('getsms', itemid=ITEMID, mobile=mobile, release=1)
+            text = get('getsms', itemid=itemid, mobile=mobile, release=1)
             return re.search(r'\d+', text).group(0)
         except exceptions.NoMessageException:  # 暂未收到短信
             time.sleep(5)
@@ -81,20 +82,17 @@ def getsms(mobile, itemid=ITEMID):
 
 def release(mobile, itemid=ITEMID):
     try:
-        get('release', itemid=ITEMID, mobile=mobile)
+        get('release', itemid=itemid, mobile=mobile)
     except exceptions.NothingException:
         pass
 
 
 def addignore(mobile, itemid=ITEMID):
-    return get('addignore', itemid=ITEMID, mobile=mobile)
+    return get('addignore', itemid=itemid, mobile=mobile)
 
 
 def releaseall():
     return get('releaseall')
-
-
-releaseall()
 
 
 if __name__ == '__main__':

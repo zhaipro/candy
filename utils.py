@@ -93,9 +93,13 @@ def ocr(img):
     return tesserocr.image_to_text(img).strip()
 
 
+def _try(func, *args, **kws):
+    try:
+        func(*args, **kws)
+    except Exception as e:
+        log('Error: %r', e)
+
+
 def loop(func):
     while True:
-        try:
-            func()
-        except Exception as e:
-            log('Error: %s', e)
+        _try(func)
