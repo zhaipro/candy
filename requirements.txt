@@ -6,3 +6,4 @@ pyjwt
 six
 pysocks
 tesserocr
+eth-keys

@@ -18,6 +18,16 @@ class User(peewee.Model):
         database = db
 
 
+class Account(peewee.Model):
+    address = peewee.CharField(20 * 2 + 2)
+    key = peewee.CharField(32 * 2 + 2)
+    token = peewee.CharField(default='')
+
+    class Meta:
+        database = db
+
+
 db.connect()
 # https://github.com/coleifer/peewee/issues/211
 User.create_table(fail_silently=True)
+Account.create_table(fail_silently=True)

@@ -50,3 +50,7 @@ TELEGRAM = {
 EOZ = {
     'INVITE': '123456',
 }
+
+BEC = {
+    'INVITE': 'ABCDEFGH',
+}

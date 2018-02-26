@@ -36,21 +36,25 @@ def log(fmt, *args):
     fp.close()
 
 
+def log_response(r):
+    if re.search('text|json', r.headers['content-type'], re.I):
+        text = text_digest(r.text, 100)
+    else:
+        text = '<binary>'
+    log('return: %s %s, %s', r.status_code, r.reason, text)
+
+
 def post(session, url, data):
     log('s.post(url=%r, data=%r)', url, data)
     r = session.post(url, data, proxies=PROXIES, timeout=5)
-    log('return: %s %s, %s', r.status_code, r.reason, r.text)
+    log_response(r)
     return r
 
 
 def get(session, url, params=None, **kws):
     log('s.get(url=%r, params=%r)', url, params)
     r = session.get(url, params=params, proxies=PROXIES, timeout=5, **kws)
-    if re.search('text|json', r.headers['content-type'], re.I):
-        text = text_digest(r.text, 100)
-    else:
-        text = '<binary>'
-    log('return: %s %s, %s', r.status_code, r.reason, text)
+    log_response(r)
     return r
 
 
@@ -87,3 +91,11 @@ def gen_session(token=None):
 def ocr(img):
     img = tesserocr.Image.open(tesserocr.BytesIO(img))
     return tesserocr.image_to_text(img).strip()
+
+
+def loop(func):
+    while True:
+        try:
+            func()
+        except Exception as e:
+            log('Error: %s', e)
