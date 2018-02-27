@@ -4,6 +4,7 @@ import os
 import telethon
 from telethon import helpers
 from telethon.tl.functions import account
+from telethon.tl.functions import PingRequest
 from telethon.tl.types.account import PasswordInputSettings
 
 import utils
@@ -51,19 +52,28 @@ class PhoneRegisteredException(Exception):
         super(PhoneRegisteredException, self).__init__('The phone number is already in use')
 
 
-def sign_up(phone, code_callback, pw=PASSWORD):
-    phone = '+86' + phone
-    client = TelegramClient('sessions/' + phone,
+def create_client(phone):
+    client = TelegramClient('sessions/+86' + phone,
                             TELEGRAM['ID'],
                             TELEGRAM['HASH'],
                             proxy=TELEGRAM['PROXY'])
     client.connect()
+    return client
+
+
+def sign_up(phone, code_callback, pw=PASSWORD):
+    client = create_client(phone)
+    phone = '+86' + phone
     r = client.send_code_request(phone)
     if r.phone_registered:
         raise PhoneRegisteredException()
     code = code_callback()
     client.sign_up(code, 'me')
     set_password(client, pw)
+
+
+def ping(client):
+    return client(PingRequest(0))
 
 
 if __name__ == '__main__':
