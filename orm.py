@@ -35,8 +35,21 @@ class TelegramAccount(peewee.Model):
         database = db
 
 
+class Proxy(peewee.Model):
+    # 直接代理：http https socks5
+    # 间接代理：ss ssr
+    url = peewee.CharField(unique=True)
+    # 代理不可用的情况：无法连接到代理 代理被墙 代理被目标网站禁用
+    # 时间戳，用于表示解禁日期
+    wait = peewee.IntegerField(default=0)
+
+    class Meta:
+        database = db
+
+
 db.connect()
 # https://github.com/coleifer/peewee/issues/211
 User.create_table(fail_silently=True)
 Account.create_table(fail_silently=True)
 TelegramAccount.create_table(fail_silently=True)
+Proxy.create_table(fail_silently=True)
