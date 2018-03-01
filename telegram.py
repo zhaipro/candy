@@ -1,8 +1,8 @@
 # coding: utf-8
 import os
 
+import telethon
 from telethon import helpers
-from telethon import TelegramClient
 from telethon.tl.functions import account
 from telethon.tl.types.account import PasswordInputSettings
 
@@ -21,7 +21,15 @@ def send_code(enity, code):
 
     client = g['client']
     client.send_message(enity, code)
-    utils.log('telegram.send_message(enity=%r, code=%r)', enity, code)
+
+
+class TelegramClient(telethon.TelegramClient):
+
+    def __call__(self, request):
+        utils.log('telegram.invoke: %s', request)
+        r = super(TelegramClient, self).__call__(request)
+        utils.log('return: %s', r)
+        return r
 
 
 def set_password(client, pw):
