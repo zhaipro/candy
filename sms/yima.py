@@ -11,7 +11,7 @@ import utils
 from . import exceptions
 
 
-API = 'http://api.51ym.me/UserInterface.aspx'
+API = 'http://api.fxhyd.cn/UserInterface.aspx'
 ITEMID = 13651
 TELEGRAM = 3988
 
