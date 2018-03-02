@@ -1,4 +1,5 @@
-requests[socks]
+# https://github.com/requests/requests/issues/4310
+requests[socks]==2.12.0
 splinter
 peewee
 telethon
