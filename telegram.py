@@ -4,33 +4,15 @@ import os
 import telethon
 from telethon import helpers
 from telethon.tl.functions import account
+from telethon.tl.functions import channels
 from telethon.tl.functions import PingRequest
 from telethon.tl.types.account import PasswordInputSettings
 
-import utils
-from settings import TELEGRAM, PASSWORD
+from settings import PASSWORD
 
 
-def send_code(enity, code):
-    g = globals()
-    if 'client' not in g:
-        g['client'] = TelegramClient('telegram',
-                                     TELEGRAM['ID'],
-                                     TELEGRAM['HASH'],
-                                     proxy=TELEGRAM['PROXY'])
-        g['client'].start()
-
-    client = g['client']
+def send_code(client, enity, code):
     client.send_message(enity, code)
-
-
-class TelegramClient(telethon.TelegramClient):
-
-    def __call__(self, request):
-        utils.log('telegram.invoke: %s', request)
-        r = super(TelegramClient, self).__call__(request)
-        utils.log('return: %s', r)
-        return r
 
 
 def set_password(client, pw):
@@ -52,23 +34,13 @@ class PhoneRegisteredException(Exception):
         super(PhoneRegisteredException, self).__init__('The phone number is already in use')
 
 
-def create_client(phone):
-    client = TelegramClient('sessions/+86' + phone,
-                            TELEGRAM['ID'],
-                            TELEGRAM['HASH'],
-                            proxy=TELEGRAM['PROXY'])
-    client.connect()
-    return client
-
-
-def sign_up(phone, code_callback, pw=PASSWORD):
-    client = create_client(phone)
+def sign_up(client, phone, code_callback, nickname='me', pw=PASSWORD):
     phone = '+86' + phone
     r = client.send_code_request(phone)
     if r.phone_registered:
         raise PhoneRegisteredException()
     code = code_callback()
-    client.sign_up(code, 'me')
+    client.sign_up(code, nickname)
     set_password(client, pw)
 
 
@@ -76,21 +48,7 @@ def ping(client):
     return client(PingRequest(0))
 
 
-if __name__ == '__main__':
-    import orm
-    from sms import yima as sms
-
-    while True:
-        try:
-            phone = sms.getmobile(itemid=sms.TELEGRAM)
-
-            def code_callback():
-                return sms.getsms(phone, itemid=sms.TELEGRAM)
-            sign_up(phone, code_callback)
-            orm.TelegramAccount.create(phone=phone, password=PASSWORD)
-        except Exception as e:
-            utils.log('Error: %r', e)
-        try:
-            sms.addignore(phone, itemid=sms.TELEGRAM)
-        except Exception as e:
-            utils.log('Error: %r', e)
+def join(client, channel):
+    request = channels.JoinChannelRequest(channel)
+    request.resolve(client, telethon.utils)
+    client(request)

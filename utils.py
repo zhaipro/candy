@@ -96,6 +96,9 @@ def ocr(img):
 def _try(func, *args, **kws):
     try:
         func(*args, **kws)
+    except KeyboardInterrupt:
+        # 这里最好是抛出异常，而不是直接退出程序，上层调用可能需要执行finally
+        raise
     except Exception as e:
         log('Error: %r', e)
 

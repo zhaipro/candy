@@ -1,5 +1,4 @@
 # coding: utf-8
-from __future__ import unicode_literals
 import os
 
 import socks
@@ -20,11 +19,10 @@ XINGKONG = {
     'TOKEN': 'your token'
 }
 
-PROXIES = None
-# {
-#     'http': 'socks5://127.0.0.1:1080',
-#     'https': 'socks5://127.0.0.1:1080',
-# }
+PROXIES = {
+    'http': 'socks5://127.0.0.1:1080',
+    'https': 'socks5://127.0.0.1:1080',
+}
 
 DATABASE = {
     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -41,5 +39,5 @@ EOZ = {
 }
 
 BEC = {
-    'INVITE': 'ABCDEFGH',
+    'INVITE': '',
 }
