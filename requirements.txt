@@ -8,3 +8,4 @@ six
 pysocks
 tesserocr
 eth-keys
+shadowsocks

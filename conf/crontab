@@ -1,0 +1,1 @@
+*/5 * * * * /usr/bin/python3 /app/hello.py >> /app/hello.log
