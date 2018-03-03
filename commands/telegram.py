@@ -20,14 +20,22 @@ def fetch(phone):
         print(telethon.utils.get_display_name(dialog.entity), dialog.message)
 
 
+def update(phone, username):
+    client = helpers.telegram_create_client(phone)
+    telegram.update_username(client, username)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('cmd', choices=['debug', 'ping', 'fetch'])
-    parser.add_argument('--phone')
+    parser.add_argument('cmd', choices=['debug', 'ping', 'fetch', 'update'])
+    parser.add_argument('-p', '--phone')
+    parser.add_argument('-u', '--username')
     args = parser.parse_args()
     if args.cmd == 'ping':
         ping()
     elif args.cmd == 'fetch':
         fetch(args.phone)
+    elif args.cmd == 'update':
+        update(args.phone, args.username)
     else:
         print(args)

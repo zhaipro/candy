@@ -52,3 +52,7 @@ def join(client, channel):
     request = channels.JoinChannelRequest(channel)
     request.resolve(client, telethon.utils)
     client(request)
+
+
+def update_username(client, username):
+    return client(account.UpdateUsernameRequest(username))
