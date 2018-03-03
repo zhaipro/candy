@@ -25,11 +25,17 @@ def update(phone, username):
     telegram.update_username(client, username)
 
 
+def join(phone, channel):
+    client = helpers.telegram_create_client(phone)
+    telegram.join(client, channel)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('cmd', choices=['debug', 'ping', 'fetch', 'update'])
+    parser.add_argument('cmd', choices=['debug', 'ping', 'fetch', 'update', 'join'])
     parser.add_argument('-p', '--phone')
     parser.add_argument('-u', '--username')
+    parser.add_argument('-c', '--channel')
     args = parser.parse_args()
     if args.cmd == 'ping':
         ping()
@@ -37,5 +43,7 @@ if __name__ == '__main__':
         fetch(args.phone)
     elif args.cmd == 'update':
         update(args.phone, args.username)
+    elif args.cmd == 'join':
+        join(args.phone, args.channel)
     else:
         print(args)
