@@ -9,3 +9,4 @@ pysocks
 tesserocr
 eth-keys
 shadowsocks
+eth-hash[pycryptodome]

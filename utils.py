@@ -7,10 +7,7 @@ import requests
 import six
 import tesserocr
 
-from settings import PROXIES
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+import settings
 
 
 def random_hex(n):
@@ -30,7 +27,7 @@ def text_digest(text, length):
 def log(fmt, *args):
     msg = fmt % args
     six.print_(msg)
-    fn = os.path.join(BASE_DIR, 'a.log')
+    fn = os.path.join(settings.DATA_DIR, 'a.log')
     fp = open(fn, 'a')
     six.print_(pid, msg, file=fp)
     fp.close()
@@ -46,14 +43,14 @@ def log_response(r):
 
 def post(session, url, data):
     log('s.post(url=%r, data=%r)', url, data)
-    r = session.post(url, data, proxies=PROXIES, timeout=5)
+    r = session.post(url, data, proxies=settings.PROXIES, timeout=5)
     log_response(r)
     return r
 
 
 def get(session, url, params=None, **kws):
     log('s.get(url=%r, params=%r)', url, params)
-    r = session.get(url, params=params, proxies=PROXIES, timeout=5, **kws)
+    r = session.get(url, params=params, proxies=settings.PROXIES, timeout=5, **kws)
     log_response(r)
     return r
 

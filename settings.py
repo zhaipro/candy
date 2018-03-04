@@ -5,6 +5,7 @@ import socks
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.getenv('DATA_DIR', os.path.join(BASE_DIR, 'data'))
 
 
 ENROLL_ID = 'your enroll id'
@@ -25,7 +26,7 @@ PROXIES = {
 }
 
 DATABASE = {
-    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
 }
 
 TELEGRAM = {

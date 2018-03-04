@@ -22,7 +22,9 @@ def eth_gen_account(token):
 
 
 def proxy_sslocal():
-    os.system('echo -e \'AUTHENTICATE ""\r\nSIGNAL NEWNYM\r\nQUIT\' | nc 127.0.0.1 9051')
+    import telnetlib
+    tn = telnetlib.Telnet('localhost', port=9051, timeout=10)
+    tn.write(b'AUTHENTICATE "password"\r\nSIGNAL NEWNYM\r\nQUIT')
     time.sleep(5)
 
 
@@ -41,7 +43,9 @@ class TelegramClient(telethon.TelegramClient):
 
 def telegram_create_client(phone, proxy=None):
     proxy = parser_proxy(proxy) if proxy else settings.TELEGRAM['PROXY']
-    client = TelegramClient('sessions/+86' + phone,
+    phone = '+86' + phone
+    session = os.path.join(settings.DATA_DIR, 'sessions', phone)
+    client = TelegramClient(session,
                             settings.TELEGRAM['ID'],
                             settings.TELEGRAM['HASH'],
                             proxy=proxy)
@@ -56,7 +60,8 @@ def telegram_sign_up(proxy=None):
         def code_callback():
             return sms.getsms(phone, itemid=sms.TELEGRAM)
         client = telegram_create_client(phone, proxy)
-        name = random.choice(open('data/names.txt').readlines())
+        fn = os.path.join(settings.DATA_DIR, 'names.txt')
+        name = random.choice(open(fn).readlines())
         name = name.strip()
         telegram.sign_up(client, phone, code_callback, name)
         orm.TelegramAccount.create(phone=phone, password=settings.PASSWORD)

@@ -39,4 +39,4 @@ def get_socks5():
 
 def parser_proxy(proxy):
     addr, port = re.match('socks5://(.+):(.+)', proxy).groups()
-    return socks.SOCKS5, addr, port
+    return socks.SOCKS5, addr, int(port)
