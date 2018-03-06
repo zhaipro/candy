@@ -43,3 +43,7 @@ BEC = {
     'INVITE': '',
     'CHANNEL': os.getenv('BEC_CHANNEL', 'beautychian05'),
 }
+
+ETH = {
+    'ETHERSCAN_API_KEY': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+}

@@ -10,3 +10,4 @@ tesserocr
 eth-keys
 shadowsocks
 eth-hash[pycryptodome]
+pyetherscan
