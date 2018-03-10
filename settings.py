@@ -1,6 +1,7 @@
 # coding: utf-8
 import os
 
+import pytz
 import socks
 
 
@@ -47,3 +48,5 @@ BEC = {
 ETH = {
     'ETHERSCAN_API_KEY': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
 }
+
+TZ = pytz.FixedOffset(8 * 60)   # 东八区

@@ -1,4 +1,5 @@
 # coding: utf-8
+from datetime import datetime
 import binascii
 import os
 import re
@@ -25,12 +26,17 @@ def text_digest(text, length):
     return text
 
 
+def now():
+    return datetime.now(settings.TZ).strftime('%Y-%m-%d %H:%M:%S')
+
+
 def log(fmt, *args):
     msg = fmt % args
     six.print_(msg)
     fn = os.path.join(settings.DATA_DIR, 'a.log')
     fp = open(fn, 'a')
-    six.print_(pid, msg, file=fp)
+    msg = '%s\t%s\t%s' % (pid, now(), msg)
+    six.print_(msg, file=fp)
     fp.close()
 
 
