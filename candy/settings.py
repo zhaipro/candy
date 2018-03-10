@@ -53,6 +53,7 @@ BEC = {
 
 ETH = {
     'ETHERSCAN_API_KEY': 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+    'KEY': os.getenv('ETH_KEY'),    # 以太坊主账户私钥
 }
 
 TZ = pytz.FixedOffset(8 * 60)   # 东八区
