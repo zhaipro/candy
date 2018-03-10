@@ -11,3 +11,7 @@ eth-keys
 shadowsocks
 eth-hash[pycryptodome]
 pyetherscan
+web3
+joblib
+ethereum
+eth-utils==0.7.3

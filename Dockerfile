@@ -6,7 +6,7 @@ WORKDIR /app
 # install deps
 # 阿里源[无奈脸]
 COPY conf/sources.list /etc/apt/sources.list
-RUN deps='ca-certificates python3 cron supervisor tesseract-ocr libtesseract-dev libleptonica-dev tor'; buildDeps='python3-pip wget vim ipython3 locales'; \
+RUN deps='ca-certificates python3 cron supervisor tesseract-ocr libtesseract-dev libleptonica-dev tor libssl-dev'; buildDeps='python3-pip wget vim ipython3 locales'; \
     set -x \
     && apt-get update && apt-get install -y $deps $buildDeps --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*

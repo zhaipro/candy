@@ -3,3 +3,4 @@
 *.txt
 *.session
 *sqlite3
+data/

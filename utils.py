@@ -3,6 +3,7 @@ import binascii
 import os
 import re
 
+from joblib import Memory
 import requests
 import six
 import tesserocr
@@ -110,3 +111,6 @@ def loop(func, errors=None):
         # 请始终确保这里是唯一捕获顶级异常的地方，不要在增加维护成本了
         except Exception as e:
             log('Error: %r', e)
+
+
+mem = Memory(cachedir=os.path.join(settings.DATA_DIR, 'joblib'))
