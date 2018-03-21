@@ -1,7 +1,7 @@
 # coding: utf-8
 import argparse
 
-import bec
+from projects import bec
 import helpers
 import settings
 import telegram
@@ -9,10 +9,9 @@ import telegram
 
 def main():
     client = helpers.telegram_sign_up(proxy=args.proxy)
-    address = helpers.eth_gen_account('BEC')
-    code = bec.invite(settings.BEC['INVITE'], address)
-    telegram.join(client, settings.BEC['CHANNEL'])
-    telegram.send_code(client, settings.BEC['CHANNEL'], code)
+    address = helpers.eth_gen_account('BEC2')
+    bec.create_wallet(address)
+    telegram.send_code(client, settings.BEC['ROBOT'], address)
 
 
 if __name__ == '__main__':

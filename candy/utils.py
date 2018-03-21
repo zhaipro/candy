@@ -51,9 +51,9 @@ def log_response(r):
 TIMEOUT = 13
 
 
-def post(session, url, data):
+def post(session, url, data, **kws):
     log('s.post(url=%r, data=%r)', url, data)
-    r = session.post(url, data, proxies=settings.PROXIES, timeout=TIMEOUT)
+    r = session.post(url, data, proxies=settings.PROXIES, timeout=TIMEOUT, **kws)
     log_response(r)
     return r
 

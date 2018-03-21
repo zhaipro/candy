@@ -41,8 +41,7 @@ EOZ = {
 }
 
 BEC = {
-    'INVITE': '',
-    'CHANNEL': os.getenv('BEC_CHANNEL', 'beautychian05'),
+    'ROBOT': os.getenv('BEC_ROBOT', 'BECTelegram2Bot'),
 }
 
 ETH = {
