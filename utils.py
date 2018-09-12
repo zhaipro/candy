@@ -6,7 +6,6 @@ import re
 
 from joblib import Memory
 import requests
-import six
 import tesserocr
 
 import settings
@@ -32,11 +31,11 @@ def now():
 
 def log(fmt, *args):
     msg = fmt % args
-    six.print_(msg)
+    print(msg)
     fn = os.path.join(settings.DATA_DIR, 'a.log')
     fp = open(fn, 'a')
     msg = '%s\t%s\t%s' % (pid, now(), msg)
-    six.print_(msg, file=fp)
+    print(msg, file=fp)
     fp.close()
 
 

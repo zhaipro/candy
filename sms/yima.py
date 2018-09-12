@@ -4,7 +4,6 @@ import re
 import time
 
 import requests
-import six
 
 import settings
 import utils
@@ -70,7 +69,7 @@ def getmobile(mobile=None, itemid=ITEMID):
 def getsms(mobile, itemid=ITEMID):
     # 总之50秒是不够用的
     # 尝试20次，间隔6秒
-    for _ in six.moves.range(20):
+    for _ in range(20):
         try:
             text = get('getsms', itemid=itemid, mobile=mobile, release=1)
             return re.search(r'\d+', text).group(0)

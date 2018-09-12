@@ -3,7 +3,6 @@ import threading
 import time
 
 import jwt
-import six
 
 import candy
 import orm
@@ -52,7 +51,7 @@ def main():
     global run_event
     run_event = threading.Event()
     run_event.set()
-    threads = [threading.Thread(target=register) for _ in six.moves.range(settings.NTHREAD)]
+    threads = [threading.Thread(target=register) for _ in range(settings.NTHREAD)]
     for thread in threads:
         thread.start()
     try:
