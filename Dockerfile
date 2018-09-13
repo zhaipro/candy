@@ -4,15 +4,11 @@ MAINTAINER 'unkonwn' unkonwn@unkonwn.com
 WORKDIR /app
 
 # install deps
-# 阿里源[无奈脸]
-COPY conf/sources.list /etc/apt/sources.list
 RUN deps='ca-certificates python3 cron supervisor tesseract-ocr libtesseract-dev libleptonica-dev tor libssl-dev'; buildDeps='python3-pip wget vim ipython3 locales'; \
     set -x \
     && apt-get update && apt-get install -y $deps $buildDeps --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# 豆瓣源
-COPY conf/pip.conf /root/.pip/pip.conf
 RUN set -x \
     && pip3 install setuptools \
     && pip3 install -U pip
