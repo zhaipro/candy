@@ -7,11 +7,14 @@ pyjwt
 pysocks
 tesserocr
 eth-keys
-shadowsocks
+# https://github.com/shadowsocks/shadowsocks/issues/646
+# https://pypi.org/project/shadowsocks-py/
+shadowsocks-py==2.9.1
 eth-hash[pycryptodome]
 pyetherscan
-web3
+web3==4.7.1
 joblib
-ethereum
-eth-utils==0.7.3
+eth-utils==1.2.1
 pytz
+# https://github.com/jssimporter/JSSImporter/issues/96#issuecomment-264287122
+pyopenssl
