@@ -56,4 +56,8 @@ ETH = {
     'KEY': os.getenv('ETH_KEY'),    # 以太坊主账户私钥
 }
 
+TRADING_PLATFORM = {
+    'BEC': os.getenv('TP_BEC'),
+}
+
 TZ = pytz.FixedOffset(8 * 60)   # 东八区

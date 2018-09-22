@@ -21,6 +21,13 @@ def step2(account, nonce=None):
     helpers.eth_send_token(args.token, account.key, to, balance)
 
 
+def step3():
+    to = settings.TRADING_PLATFORM[args.token]
+    address = eth.utils.key_to_address(settings.ETH['KEY'])
+    balance = helpers.eth_get_token_balance(args.token, address)
+    helpers.eth_send_token(args.token, settings.ETH['KEY'], to, balance)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--token')

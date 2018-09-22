@@ -34,3 +34,9 @@ Docstring: Takes a number of a unit and converts it to wei.
 web3.Web3.fromWei(number:int, unit:str) -> Union[int, decimal.Decimal]
 Docstring: Takes a number of wei and converts it to any other ether unit.
 ```
+
+## 交易平台
+
+[okex](https://www.okex.com)
+
+如果不想实名认证，可使用 [Tor Brower](https://www.torproject.org/) 跳转到国外。
