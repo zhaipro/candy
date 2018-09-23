@@ -17,9 +17,37 @@ import utils
 
 
 def eth_gen_account(token):
-    address, key = eth.gen_account()
+    address, key = eth.utils.gen_account()
     orm.Account.create(address=address, key=key, token=token)
     return address
+
+
+def eth_send_transaction(key, to, amount=0, gas_price=6, gas=60000, data=b'', nonce=None):
+    tx, nonce = eth.web3.send_transaction(key, to, gas_price, gas, amount, data, nonce)
+    utils.log('Txhash\t%s', tx)
+    return tx, nonce
+
+
+@utils.mem.cache
+def eth_get_abi(token):
+    return eth.etherscan.get_abi(token)
+
+
+CONTRACT = {
+    'BEC': '0x3495Ffcee09012AB7D827abF3E3b3ae428a38443',
+}
+
+
+def eth_get_token_balance(token, address):
+    token = CONTRACT.get(token, token)
+    return eth.web3.get_token_balance(token, address)
+
+
+def eth_send_token(token, key, to, amount, nonce=None):
+    # token: token name or contract address
+    token = CONTRACT.get(token, token)
+    data = eth.web3.encode_token_transfer_data(token, to, amount)
+    return eth_send_transaction(key, token, data=data, nonce=nonce)
 
 
 def proxy_sslocal():
