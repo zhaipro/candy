@@ -34,8 +34,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN crontab conf/crontab
 RUN ln -s /app/conf/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
-RUN chmod u+x ./run.sh
-CMD ["./run.sh"]
+CMD ["supervisord", "--nodaemon"]
