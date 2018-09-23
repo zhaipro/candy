@@ -1,23 +1,23 @@
 # coding: utf-8
 import unittest
 
+import eth_utils
+
 import eth
-import utils
 
 
-class TestUtils(unittest.TestCase):
+class Test(unittest.TestCase):
 
-    def test_now(self):
-        utils.now()
-
-
-class TestEth(unittest.TestCase):
+    def test_gen_account(self):
+        # 随机生成的地址必须带有校验和
+        address, password = eth.gen_account()
+        self.assertTrue(eth_utils.is_checksum_address(address))
 
     def test_key_to_address(self):
         # 必须返回带有校验和的地址
         key = '0xa676a1eb74b7958b6be2c02e72d2616b2b6885684f71baf25f349b557215402b'
-        address = '0x68B6853a780EFe36275219fe7298c23192AEcD01'
-        self.assertEqual(eth.key_to_address(key), address)
+        address = eth.key_to_address(key)
+        self.assertTrue(eth_utils.is_checksum_address(address))
 
     def test_to_wei(self):
         self.assertEqual(eth.ether_to_wei(1), 1e18)
