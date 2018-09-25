@@ -1,0 +1,14 @@
+sudo: required
+
+language: python
+
+install: true
+
+services:
+  - docker
+
+before_script:
+  - docker build -t candy .
+
+script:
+  - docker run -t candy python3 -m unittest discover -s candy

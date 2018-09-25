@@ -1,4 +1,5 @@
 
+![](https://travis-ci.com/zhaipro/candy.svg?branch=master)
 
 ## 依赖
 
