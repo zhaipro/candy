@@ -1,5 +1,6 @@
 # coding: utf-8
 # https://web3py.readthedocs.io/en/stable/examples.html#interacting-with-an-erc20-contract
+# https://web3py.readthedocs.io/en/stable/quickstart.html#provider-infura
 from web3.auto.infura import w3
 import eth_utils
 
